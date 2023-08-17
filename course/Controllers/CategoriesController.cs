@@ -8,7 +8,7 @@ namespace course.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private List<Category> categories = new List<Category>()
+        private static List<Category> categories = new List<Category>()
         {
             new Category()
             {
@@ -21,6 +21,12 @@ namespace course.Controllers
         public IEnumerable<Category> Get()
         {
             return categories;
+        }
+
+        [HttpPost]
+        public void Post([FromBody]Category category)
+        {
+            categories.Add(category);
         }
 
 
