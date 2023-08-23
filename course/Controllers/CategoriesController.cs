@@ -1,6 +1,6 @@
-﻿using course.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using course.Data;
+using course.Models;
 
 namespace course.Controllers
 {
@@ -8,27 +8,48 @@ namespace course.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private static List<Category> categories = new List<Category>()
-        {
-            new Category()
-            {
-                Id = 0,
-                Name = "Apartment",
-                ImageUrl = "appartment.png"
-            }
-        };
+        ApiDbContext _db = new ApiDbContext();
+        // GET: api/<CategoriesController>
         [HttpGet]
         public IEnumerable<Category> Get()
         {
-            return categories;
+            return _db.Categories;
         }
 
-        [HttpPost]
-        public void Post([FromBody]Category category)
+        // GET api/<CategoriesController>/5
+        [HttpGet("{id}")]
+        public Category Get(int id)
         {
-            categories.Add(category);
+            var category = _db.Categories.FirstOrDefault(c => c.Id == id);
+            return category;
         }
 
+        // POST api/<CategoriesController>
+        [HttpPost]
+        public void Post([FromBody] Category category)
+        {
+            _db.Categories.Add(category);
+            _db.SaveChanges();
 
+        }
+
+        // PUT api/<CategoriesController>/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] Category categorys)
+        {
+            var category = _db.Categories.Find(id);
+            category.Name = categorys.Name;
+            category.ImageUrl = categorys.ImageUrl;
+            _db.SaveChanges();
+        }
+
+        // DELETE api/<CategoriesController>/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            var category = _db.Categories.Find(id);
+            _db.Categories.Remove(category);
+            _db.SaveChanges();
+        }
     }
 }
