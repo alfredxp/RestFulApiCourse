@@ -32,7 +32,7 @@ namespace course.Controllers
             }    
             _db.Users.Add(user);
             _db.SaveChanges();
-            return StatusCode(StatusCodes.Status201Created);
+            return new ObjectResult(user) { StatusCode = StatusCodes.Status201Created };
 
 
         }
