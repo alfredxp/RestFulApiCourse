@@ -37,6 +37,32 @@ namespace course.Controllers
             return Ok(propertiesResult);
         }
 
+        [HttpGet("TrendingProperties")]
+        [Authorize]
+        public IActionResult GetTrendingProperties()
+        {
+            var propertiesResult = _db.Properties.Where(c => c.IsTrending == true);
+            if (propertiesResult == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(propertiesResult);
+        }
+
+        [HttpGet("SearchProperties")]
+        [Authorize]
+        public IActionResult GetSearchProperties(string address)
+        {
+            var propertiesResult = _db.Properties.Where(c => c.Address.Contains(address));
+            if (propertiesResult == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(propertiesResult);
+        }
+
 
         [HttpPost]
         [Authorize]
